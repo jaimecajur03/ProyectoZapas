@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportJa</title>
+    <link rel="stylesheet" href="style.css">
+    
+
+</head>
+<body>
+
+    <!-- Menú principal -->
+    <div class="menu">
+        <div class="title">SportJa</div>
+
+        <!-- Menú Hombres -->
+        <div class="menu-item"><a href="hombres.html">
+        Hombres</a>
+        <div class="subvariables">
+        <div class="tallas"><a href="">
+            Tallas</a>
+            <div class="opciones-tallas">
+                <div class="opcion-talla"><a href="">S</a></div>
+                <div class="opcion-talla"><a href="">M</a></div>
+                <div class="opcion-talla"><a href="">L</a></div>
+            </div>
+            </div>
+            <div class="top-marcas"><a href="">
+            Top Marcas</a>
+            <div class="opciones-marcas">
+                <div class="opcion-marca"><a href="">Nike</a></div>
+                <div class="opcion-marca"><a href="">Adidas</a></div>
+                <div class="opcion-marca"><a href="">Puma</a></div>
+            </div>
+            </div>
+            <div class="color"><a href="">
+            Color</a>
+            <div class="opciones-color">
+                <div class="opcion-color"><a href="">Rojo</a></div>
+                <div class="opcion-color"><a href="">Azul</a></div>
+                <div class="opcion-color"><a href="">Verde</a></div>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Menú Mujeres -->
+        <div class="menu-item"><a href="mujeres.html">
+        Mujeres</a>
+        <div class="subvariables">
+            <div class="tallas"><a href="">
+            Tallas</a>
+            <div class="opciones-tallas">
+                <div class="opcion-talla"><a href="">S</a></div>
+                <div class="opcion-talla"><a href="">M</a></div>
+                <div class="opcion-talla"><a href="">L</a></div>
+            </div>
+            </div>
+            <div class="top-marcas"><a href="">
+            Top Marcas</a>
+            <div class="opciones-marcas">
+                <div class="opcion-marca"><a href="">Nike</a></div>
+                <div class="opcion-marca"><a href="">Adidas</a></div>
+                <div class="opcion-marca"><a href="">Puma</a></div>
+            </div>
+            </div>
+            <div class="color"><a href="">
+            Color</a>
+            <div class="opciones-color">
+                <div class="opcion-color"><a href="">Rojo</a></div>
+                <div class="opcion-color"><a href="">Azul</a></div>
+                <div class="opcion-color"><a href="">Verde</a></div>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Menú Niños -->
+        <div class="menu-item"><a href="niños.html">
+        Niños</a>
+        <div class="subvariables">
+            <div class="tallas"><a href="">
+            Tallas</a>
+            <div class="opciones-tallas">
+                <div class="opcion-talla"><a href="">S</a></div>
+                <div class="opcion-talla"><a href="">M</a></div>
+                <div class="opcion-talla"><a href="">L</a></div>
+            </div>
+            </div>
+            <div class="top-marcas"><a href="">
+            Top Marcas</a>
+            <div class="opciones-marcas">
+                <div class="opcion-marca"><a href="">Nike</a></div>
+                <div class="opcion-marca"><a href="">Adidas</a></div>
+                <div class="opcion-marca"><a href="">Puma</a></div>
+            </div>
+            </div>
+            <div class="color"><a href="">
+            Color</a>
+            <div class="opciones-color">
+                <div class="opcion-color"><a href="">Rojo</a></div>
+                <div class="opcion-color"><a href="">Azul</a></div>
+                <div class="opcion-color"><a href="">Verde</a></div>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Buscador -->
+        <div class="menu-item">
+        <input type="text" placeholder="Buscar Zapatillas..." id="search" class="search-bar">
+        </div>
+
+
+
+        <div class="menu-item">
+            <a href="#" class="login">Login</a>
+            <!-- Formulario de Login (oculto por defecto) -->
+            <div class="form-container" id="login-form" style="display:none;">
+                <h3>Iniciar Sesión</h3>
+                <form id="login-form-content">
+                    <input type="email" id="login-email" placeholder="Correo electrónico" required>
+                    <input type="password" id="login-password" placeholder="Contraseña" required>
+                    <button type="button" onclick="login()">Iniciar sesión</button>
+                </form>
+                <p>¿No tienes cuenta? <a href="#" class="register">Registrarse</a></p>
+            </div>
+        
+            <!-- Formulario de Registro (oculto por defecto) -->
+            <div class="form-container" id="register-form" style="display:none;">
+                <h3>Registrarse</h3>
+                <form id="register-form-content">
+                    <input type="text" id="register-name" placeholder="Nombre completo" required>
+                    <input type="email" id="register-email" placeholder="Correo electrónico" required>
+                    <input type="password" id="register-password" placeholder="Contraseña" required>
+                    <button type="button" onclick="register()">Registrarse</button>
+                </form>
+                <p>¿Ya tienes cuenta? <a href="#" class="login">Iniciar sesión</a></p>
+            </div>
+        </div>
+        
+            </div>
+
+
+
+                <!-- Contenido principal -->
+    <div class="main-content">
+            <!-- Sección Resumen -->
+        <div class="secciones-resumen">
+        <!-- Sección Hombres -->
+        <div class="resumen-seccion">
+            <div class="resumen-titulo"><a href="hombres.html">Hombres</a></div>
+            <div class="resumen-item">
+            <img src="img/prueba1.jpg" alt="Hombres 1" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Imagen 1</a></div>
+            </div>
+            <div class="resumen-item">
+            <img src="img/prueba2.jpg" alt="Hombres 2" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Imagen 2</a></div>
+            </div>
+            <div class="resumen-item">
+            <img src="img/prueba3.jpg" alt="Hombres 3" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Imagen 3</a></div>
+            </div>
+            <div class="resumen-item">
+            <img src="img/prueba4.jpg" alt="Hombres 4" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Imagen 4</a></div>
+            </div>
+        </div>
+
+        <!-- Sección Mujeres -->
+        <div class="resumen-seccion">
+            <div class="resumen-titulo"><a href="mujeres.html">Mujeres</a></div>
+            <div class="resumen-item">
+            <img src="img/prueba1.jpg" alt="Mujeres 1" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Imagen 1</a></div>
+            </div>
+            <div class="resumen-item">
+            <img src="img/prueba2.jpg" alt="Mujeres 2" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Imagen 2</a></div>
+            </div>
+            <div class="resumen-item">
+            <img src="img/prueba3.jpg" alt="Mujeres 3" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Imagen 3</a></div>
+            </div>
+            <div class="resumen-item">
+            <img src="img/prueba4.jpg" alt="Mujeres 4" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Imagen 4</a></div>
+            </div>
+        </div>
+
+        <!-- Sección Niños -->
+        <div class="resumen-seccion">
+            <div class="resumen-titulo"><a href="niños.html">Niños</a></div>
+            <div class="resumen-item">
+            <img src="img/prueba1.jpg" alt="Niños 1" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Van goh</a></div>
+            </div>
+            <div class="resumen-item">
+            <img src="img/prueba2.jpg" alt="Niños 2" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Imagen 2</a></div>
+            </div>
+            <div class="resumen-item">
+            <img src="img/prueba3.jpg" alt="Niños 3" class="imagen-resumen">
+            <div class="texto-resumen"><a href="">Imagen 3 </a></div>
+            </div>
+            <div class="resumen-item">
+            <img src="img/prueba4.jpg" alt="Niños 4" class="imagen-resumen">
+            <div class="texto-resumen"> <a href="niños.html"> Imagen 4 </a></div>                                <!-- En href poner la dirección de la página donde está la sección de niños-->
+            </div>
+        </div>
+
+        <!-- Sección Atención al Cliente -->
+        <div class="resumen-seccion">
+            <div class="resumen-titulo">Atención al Cliente</div>
+            <div class="texto-enlace"><a href="#">Correo Electrónico</a></div>
+            <div class="texto-enlace"><a href="#">Número de Teléfono</a></div>
+
+        </div>
+
+        </div>
+
+
+    </div>
+
+    <script src="script.js"></script>
+    
+
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .filters {
+            margin-bottom: 20px;
+        }
+        .filters label {
+            margin-right: 10px;
+        }
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .zapatilla {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .zapatilla img {
+            width: 100%;
+            max-height: 150px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        .zapatilla h3 {
+            margin: 10px 0 5px;
+            font-size: 1.1em;
+        }
+        .zapatilla p {
+            font-size: 0.9em;
+            color: #555;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<!-- Menú principal -->
+<div class="menu">
+    <div class="title"> <a href="index.html">SportJa</a> </div>
+
+    <!-- Menú Hombres -->
+    <div class="menu-item"><a href="hombres.html">
+    Hombres</a>
+    <div class="subvariables">
+        <div class="tallas"><a href="">
+        Tallas</a>
+        <div class="opciones-tallas">
+            <div class="opcion-talla"><a href="">S</a></div>
+            <div class="opcion-talla"><a href="">M</a></div>
+            <div class="opcion-talla"><a href="">L</a></div>
+        </div>
+        </div>
+        <div class="top-marcas"><a href="">
+        Top Marcas</a>
+        <div class="opciones-marcas">
+            <div class="opcion-marca"><a href="">Nike</a></div>
+            <div class="opcion-marca"><a href="">Adidas</a></div>
+            <div class="opcion-marca"><a href="">Puma</a></div>
+        </div>
+        </div>
+        <div class="color"><a href="">
+        Color</a>
+        <div class="opciones-color">
+            <div class="opcion-color"><a href="">Rojo</a></div>
+            <div class="opcion-color"><a href="">Azul</a></div>
+            <div class="opcion-color"><a href="">Verde</a></div>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Menú Mujeres -->
+    <div class="menu-item"><a href="mujeres.html">
+    Mujeres</a>
+    <div class="subvariables">
+        <div class="tallas"><a href="">
+        Tallas</a>
+        <div class="opciones-tallas">
+            <div class="opcion-talla"><a href="">S</a></div>
+            <div class="opcion-talla"><a href="">M</a></div>
+            <div class="opcion-talla"><a href="">L</a></div>
+        </div>
+        </div>
+        <div class="top-marcas"><a href="">
+        Top Marcas</a>
+        <div class="opciones-marcas">
+            <div class="opcion-marca"><a href="">Nike</a></div>
+            <div class="opcion-marca"><a href="">Adidas</a></div>
+            <div class="opcion-marca"><a href="">Puma</a></div>
+        </div>
+        </div>
+        <div class="color"><a href="">
+        Color</a>
+        <div class="opciones-color">
+            <div class="opcion-color"><a href="">Rojo</a></div>
+            <div class="opcion-color"><a href="">Azul</a></div>
+            <div class="opcion-color"><a href="">Verde</a></div>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Menú Niños -->
+    <div class="menu-item"><a href="niños.html">
+    Niños</a>
+    <div class="subvariables">
+        <div class="tallas"><a href="">
+        Tallas</a>
+        <div class="opciones-tallas">
+            <div class="opcion-talla"><a href="">S</a></div>
+            <div class="opcion-talla"><a href="">M</a></div>
+            <div class="opcion-talla"><a href="">L</a></div>
+        </div>
+        </div>
+        <div class="top-marcas"><a href="">
+        Top Marcas</a>
+        <div class="opciones-marcas">
+            <div class="opcion-marca"><a href="">Nike</a></div>
+            <div class="opcion-marca"><a href="">Adidas</a></div>
+            <div class="opcion-marca"><a href="">Puma</a></div>
+        </div>
+        </div>
+        <div class="color"><a href="">
+        Color</a>
+        <div class="opciones-color">
+            <div class="opcion-color"><a href="">Rojo</a></div>
+            <div class="opcion-color"><a href="">Azul</a></div>
+            <div class="opcion-color"><a href="">Verde</a></div>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Buscador -->
+    <div class="menu-item">
+    <input type="text" placeholder="Buscar Zapatillas..." id="search" class="search-bar">
+    </div>
+
+    <!-- Login -->
+    <div class="menu-item">
+    <a href="" class="login">Login</a>
+    </div>
+</div>
+
+<body>
+    <h1>Catálogo de Zapatillas</h1>
+
+    <!-- Filtros -->
+    <div class="filters">
+        <label>
+            Color:
+            <select id="filter-color">
+                <option value="all">Todos</option>
+                <option value="rojo">Rojo</option>
+                <option value="azul">Azul</option>
+                <option value="negro">Negro</option>
+                <option value="blanco">Blanco</option>
+            </select>
+        </label>
+        <label>
+            Talla:
+            <select id="filter-size">
+                <option value="all">Todas</option>
+                <option value="38">38</option>
+                <option value="40">40</option>
+                <option value="42">42</option>
+                <option value="44">44</option>
+            </select>
+        </label>
+        <label>
+            Marca:
+            <select id="filter-brand">
+                <option value="all">Todas</option>
+                <option value="Nike">Nike</option>
+                <option value="Adidas">Adidas</option>
+                <option value="Puma">Puma</option>
+                <option value="Reebok">Reebok</option>
+            </select>
+        </label>
+        <button onclick="applyFilters()">Aplicar Filtros</button>
+    </div>
+
+    <!-- Catálogo -->
+    <div class="catalogo" id="catalogo">
+        <!-- Zapatilla 1 -->
+        <div class="zapatilla" data-color="rojo" data-size="40" data-brand="Nike">
+            <img src="https://via.placeholder.com/150" alt="Zapatilla 1">
+            <h3>Zapatilla 1</h3>
+            <p>Color: Rojo, Talla: 40, Marca: Nike</p>
+        </div>
+        <!-- Zapatilla 2 -->
+        <div class="zapatilla" data-color="azul" data-size="42" data-brand="Adidas">
+            <img src="https://via.placeholder.com/150" alt="Zapatilla 2">
+            <h3>Zapatilla 2</h3>
+            <p>Color: Azul, Talla: 42, Marca: Adidas</p>
+        </div>
+        <!-- Zapatilla 3 -->
+        <div class="zapatilla" data-color="negro" data-size="38" data-brand="Puma">
+            <img src="https://via.placeholder.com/150" alt="Zapatilla 3">
+            <h3>Zapatilla 3</h3>
+            <p>Color: Negro, Talla: 38, Marca: Puma</p>
+        </div>
+        <!-- Zapatilla 4 -->
+        <div class="zapatilla" data-color="blanco" data-size="44" data-brand="Reebok">
+            <img src="https://via.placeholder.com/150" alt="Zapatilla 4">
+            <h3>Zapatilla 4</h3>
+            <p>Color: Blanco, Talla: 44, Marca: Reebok</p>
+        </div>
+        <!-- Zapatilla 5 -->
+        <div class="zapatilla" data-color="rojo" data-size="42" data-brand="Adidas">
+            <img src="https://via.placeholder.com/150" alt="Zapatilla 5">
+            <h3>Zapatilla 5</h3>
+            <p>Color: Rojo, Talla: 42, Marca: Adidas</p>
+        </div>
+        <!-- Zapatilla 6 -->
+        <div class="zapatilla" data-color="negro" data-size="40" data-brand="Nike">
+            <img src="https://via.placeholder.com/150" alt="Zapatilla 6">
+            <h3>Zapatilla 6</h3>
+            <p>Color: Negro, Talla: 40, Marca: Nike</p>
+        </div>
+        <!-- Zapatilla 7 -->
+        <div class="zapatilla" data-color="azul" data-size="38" data-brand="Puma">
+            <img src="https://via.placeholder.com/150" alt="Zapatilla 7">
+            <h3>Zapatilla 7</h3>
+            <p>Color: Azul, Talla: 38, Marca: Puma</p>
+        </div>
+        <!-- Zapatilla 8 -->
+        <div class="zapatilla" data-color="blanco" data-size="44" data-brand="Reebok">
+            <img src="https://via.placeholder.com/150" alt="Zapatilla 8">
+            <h3>Zapatilla 8</h3>
+            <p>Color: Blanco, Talla: 44, Marca: Reebok</p>
+        </div>
+    </div>
+
+    <script>
+        function applyFilters() {
+            const colorFilter = document.getElementById("filter-color").value;
+            const sizeFilter = document.getElementById("filter-size").value;
+            const brandFilter = document.getElementById("filter-brand").value;
+
+            const zapatillas = document.querySelectorAll(".zapatilla");
+
+            zapatillas.forEach(zapatilla => {
+                const color = zapatilla.getAttribute("data-color");
+                const size = zapatilla.getAttribute("data-size");
+                const brand = zapatilla.getAttribute("data-brand");
+
+                if (
+                    (colorFilter === "all" || color === colorFilter) &&
+                    (sizeFilter === "all" || size === sizeFilter) &&
+                    (brandFilter === "all" || brand === brandFilter)
+                ) {
+                    zapatilla.classList.remove("hidden");
+                } else {
+                    zapatilla.classList.add("hidden");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

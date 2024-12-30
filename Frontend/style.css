@@ -1,0 +1,224 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9; /* Fondo gris muy claro */
+}
+
+  /* Menú principal */
+  .menu {
+    background-color: #3e5f70; /* Azul suave para el menú */
+    color: white;
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.menu-item {
+    background-color: #4e6b7b; /* Azul medio para los ítems */
+    padding: 10px;
+    margin-right: 15px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.menu-item:hover {
+    background-color: #6fa3a9; /* Verde azulado más suave al pasar el cursor */
+}
+
+/* Submenús */
+.subvariables {
+    display: none;
+    position: absolute;
+    background-color: #ffffff; /* Fondo blanco para los submenús */
+    border: 1px solid #ccc;
+    top: 100%;
+    left: 0;
+    width: 200px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    border-radius: 5px;
+}
+
+.menu-item:hover .subvariables {
+    display: block;
+}
+
+.tallas, .top-marcas, .color {
+    background-color: #ff7f50; /* Coral suave para las secciones */
+    padding: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+    border-radius: 3px;
+}
+
+.tallas:hover, .top-marcas:hover, .color:hover {
+    background-color: #f0a500; /* Naranja dorado al pasar el ratón */
+}
+
+.opciones-tallas, .opciones-marcas, .opciones-color {
+    display: none;
+    background-color: #fff5e1; /* Fondo suave de crema para las opciones */
+    padding: 5px;
+    border: 1px solid #f1c40f;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+.menu-item .tallas:hover .opciones-tallas,
+.menu-item .top-marcas:hover .opciones-marcas,
+.menu-item .color:hover .opciones-color {
+    display: block;
+}
+
+.opcion-talla, .opcion-marca, .opcion-color {
+    background-color: #ffcc00; /* Amarillo suave para las opciones */
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 3px;
+}
+
+.opcion-talla:hover, .opcion-marca:hover, .opcion-color:hover {
+    background-color: #ff5e00; /* Naranja cálido al pasar el cursor */
+}
+
+
+  /* Estilos para el buscador y login */
+.search-bar {
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+.login {
+    color: white;
+    text-decoration: none;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.login:hover {
+    color: #6fa3a9; /* Verde azulado al pasar el ratón sobre el login */
+}
+
+  /* Contenido principal */
+.main-content {
+    margin-top: 150px;
+    padding: 20px;
+    background-color: #fff; /* Fondo blanco para el contenido */
+}
+
+  /* Secciones de la página principal */
+.section-summary {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+/* Secciones de la página principal */
+.section-summary .section {
+    background-color: #fefefe; /* Blanco suave para las secciones */
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 30%;
+}
+
+.section-summary .section img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.section-summary .section h3 {
+    color: #3e5f70; /* Azul oscuro para el título */
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.section-summary .section p {
+    color: #7f8c8d;
+}
+
+  /* Estilo general para las secciones de resumen */
+.secciones-resumen {
+    margin-top: 50px; /* Asegura que las secciones no se solapen con el menú fijo */
+    padding: 0;
+}
+
+  /* Estilo para cada bloque de sección */
+.resumen-seccion {
+    margin: 0; /* Elimina márgenes */
+    padding: 30px 20px; /* Espaciado dentro de la sección */
+    width: 100%; /* Hace que la sección ocupe todo el ancho */
+    background-color: #f7f7f7; /* Fondo muy suave */
+    box-sizing: border-box; /* Incluye el padding y los bordes en el tamaño total */
+}
+
+  .resumen-seccion:nth-child(4) { /* Estilo específico para la sección de Atención al Cliente */
+    background-color: #0275d8; /* Azul brillante para atención al cliente */
+    color: white; /* Texto blanco para el contraste */
+}
+
+  /* Estilo para los elementos dentro de cada sección */
+.resumen-item {
+    background-color: #fff; /* Fondo blanco para cada item */
+    width: 22%; /* Ancho para mostrar 4 elementos por fila */
+    margin: 10px 1%; /* Márgenes alrededor de cada item */
+    padding: 0;
+    display: inline-block; /* Permite que los items se alineen horizontalmente */
+    text-align: center;
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: transform 0.3s ease; /* Efecto suave de transformación */
+}
+
+.resumen-item:hover {
+    transform: translateY(-5px); /* Mueve el elemento hacia arriba al pasar el cursor */
+}
+
+  /* Estilo de la imagen */
+.imagen-resumen {
+    width: 100%; /* Hace que la imagen ocupe todo el ancho disponible */
+    height: 150px; /* Altura estándar para las imágenes */
+    object-fit: cover; /* Asegura que la imagen se recorte adecuadamente */
+}
+
+  /* Estilo para el texto debajo de la imagen */
+.texto-resumen {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333; /* Color gris oscuro */
+    background-color: #f1f1f1;
+    border-top: 2px solid #ccc; /* Línea sutil encima del texto */
+}
+
+  /* Estilo para los enlaces de Atención al Cliente */
+.texto-enlace {
+    font-size: 18px;
+    font-weight: normal;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.texto-enlace a {
+    text-decoration: none;
+    color: #fff; /* Enlaces en blanco para contraste con el fondo oscuro */
+    font-weight: bold;
+}
+
+.texto-enlace a:hover {
+    color: #88e100; /* Verde brillante al pasar el ratón */
+}
