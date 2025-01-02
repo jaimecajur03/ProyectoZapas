@@ -15,6 +15,12 @@ const SECRET_KEY = process.env.SECRET_KEY || 'D4NG3R0U5CRYP4%';  // Clave secret
 app.use(express.json());
 app.use(cors());
 
+
+app.use(cors({
+    origin: 'http://localhost:5000', // Reemplazar con el origen del frontend
+}));
+
+
 // Conexión a MySQL
 const db = mysql.createConnection({
     host: 'localhost',
