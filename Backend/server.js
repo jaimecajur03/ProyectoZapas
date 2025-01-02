@@ -17,7 +17,7 @@ app.use(cors());
 
 
 app.use(cors({
-    origin: 'http://localhost:5000', // Reemplazar con el origen del frontend
+    origin: 'http://127.0.0.1:5500'
 }));
 
 

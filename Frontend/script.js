@@ -31,9 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     // Función de login
-    function login() {
-        const email = document.getElementById("login-email").value.trim();
-        const password = document.getElementById("login-password").value.trim();
+    window.login = function() {
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
 
         if (!email || !password) {
             alert("Por favor, completa todos los campos");
@@ -43,7 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch('http://localhost:5000/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ email, password })
         })
@@ -64,15 +65,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Función de registro
-    function register() {
-        const name = document.getElementById("register-name").value.trim();
-        const email = document.getElementById("register-email").value.trim();
-        const password = document.getElementById("register-password").value.trim();
+    window.register = function() {
+        const name = document.getElementById("register-name").value;
+        const email = document.getElementById("register-email").value;
+        const password = document.getElementById("register-password").value;
 
         fetch('http://localhost:5000/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ name, email, password })
         })
@@ -101,7 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch('http://localhost:5000/verify-token', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
             }
         })
         .then(response => response.json())
