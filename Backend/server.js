@@ -83,6 +83,7 @@ app.post('/register', async (req, res) => {
 });
 
 // Ruta de inicio de sesión
+// Ruta de inicio de sesión
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
@@ -113,10 +114,14 @@ app.post('/login', (req, res) => {
 
             // Generar un token JWT
             const token = jwt.sign({ email: user.email, isAdmin: user.isAdmin }, SECRET_KEY, { expiresIn: '1h' });
-            res.json({ token, isAdmin: user.isAdmin });
+
+            // Enviar el token y el nombre del usuario en la respuesta
+            res.json({ token, userName: user.name, isAdmin: user.isAdmin });
         });
     });
 });
+
+
 
 // Ruta para verificar si el token es válido
 app.get('/verify-token', (req, res) => {
@@ -134,6 +139,23 @@ app.get('/verify-token', (req, res) => {
         console.log("Token recibido:", token);
     }
 });
+
+app.post('/verify-token', (req, res) => {
+    const token = req.headers['authorization'];
+    
+    if (!token) {
+        return res.status(401).json({ message: "Token no proporcionado" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        res.json({ valid: true, name: decoded.name });
+    } catch (error) {
+        console.error(error);
+        res.status(401).json({ message: "Token inválido" });
+    }
+});
+
 
 // Iniciar el servidor
 app.listen(PORT, () => {

@@ -222,3 +222,27 @@ body {
 .texto-enlace a:hover {
     color: #88e100; /* Verde brillante al pasar el ratón */
 }
+
+
+#user-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#user-name {
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#logout-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 5px;
+}

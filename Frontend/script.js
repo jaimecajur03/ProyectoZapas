@@ -34,12 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
     window.login = function() {
         const email = document.getElementById("login-email").value;
         const password = document.getElementById("login-password").value;
-
+    
         if (!email || !password) {
             alert("Por favor, completa todos los campos");
             return;
         }
-
+    
         fetch('http://localhost:5000/login', {
             method: 'POST',
             headers: {
@@ -53,7 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (data.token) {
                 alert("Login exitoso!");
                 localStorage.setItem('token', data.token); // Almacenar el token
+                localStorage.setItem('userName', data.userName); // Almacenar el nombre del usuario
                 showAdminOptions(data.isAdmin); // Mostrar opciones si es admin
+                window.location.reload(); // Recargar la página para reflejar el cambio
             } else {
                 alert("Credenciales incorrectas");
             }
@@ -63,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Error de conexión");
         });
     }
+    
 
     // Función de registro
     window.register = function() {
@@ -98,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Verificación de token al cargar la página
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (token) {
         fetch('http://localhost:5000/verify-token', {
             method: 'POST',
@@ -107,18 +110,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 'Accept': 'application/json'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Redirección o error del servidor');
+            }
+            return response.json();  // Intenta convertir la respuesta a JSON
+        })
         .then(data => {
-            if (data.valid) {
-                document.getElementById("login").textContent = `Hola, ${data.name}`;
-                showAdminOptions(data.isAdmin);
+            if (data.isValid) {
+                const userName = localStorage.getItem('userName');
+                document.getElementById('user-name').textContent = userName || "Usuario"; // Mostrar nombre o un valor predeterminado
             } else {
-                localStorage.removeItem("token");
+                localStorage.removeItem('token');
+                localStorage.removeItem('userName');
                 alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
             }
         })
         .catch(err => console.error(err));
     }
+
 
     // Usar addEventListener para evitar el error de ReferenceError
     const loginLink = document.querySelector('.login');
@@ -137,5 +147,44 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const userNameElement = document.getElementById('user-name');
+    const logoutButton = document.getElementById('logout-button');
+    
+    // Recuperar el nombre del usuario desde localStorage
+    const userName = localStorage.getItem('userName') || "Usuario";  // Si no hay nombre, usar "Usuario"
+    const token = localStorage.getItem('token');  // Verifica si hay un token
+
+    if (token) {
+        // Si hay token, mostrar el nombre de usuario
+        userNameElement.textContent = userName;
+        
+        // Mostrar el botón "Cerrar sesión" cuando el mouse pase sobre el nombre
+        userNameElement.addEventListener('mouseover', () => {
+            logoutButton.style.display = 'block';
+        });
+
+        userNameElement.addEventListener('click', () => {
+            logoutButton.style.display = logoutButton.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Funcionalidad del botón "Cerrar sesión"
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem('token');  // Eliminar el token
+            localStorage.removeItem('userName');  // Eliminar el nombre del usuario
+            alert(`Adiós, ${userName}`);
+            window.location.href = '/Frontend/index.html';  // Redirige a la página de inicio (ajustar según sea necesario)
+
+        });
+    } else {
+        // Si no hay token, mostrar "Usuario" y no permitir mostrar el botón de logout
+        userNameElement.textContent = "Usuario";
+        logoutButton.style.display = 'none';  // Asegurarse de que no se muestra el botón
+    }
+});
+
+
+
 
 

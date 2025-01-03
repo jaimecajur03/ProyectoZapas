@@ -139,7 +139,27 @@
                 <p>¿Ya tienes cuenta? <a href="#" class="login">Iniciar sesión</a></p>
             </div>
         </div>
-        
+
+        <!-- Carrito de compras -->
+        <div id="cart-container">
+            <button id="cart-button">
+                🛒 Carrito (<span id="cart-count">0</span>)
+            </button>
+        </div>
+
+        <!-- Detalles del carrito (oculto por defecto) -->
+        <div id="cart-details" style="display: none;">
+            <h2>Carrito</h2>
+            <ul id="cart-list"></ul>
+            <button id="checkout-button">Confirmar Compra</button>
+        </div>
+
+        <!-- Información del usuario -->
+        <div id="user-container">
+            <span id="user-name">Usuario</span>
+            <button id="logout-button" style="display: none;">Cerrar sesión</button>
+        </div>
+
             </div>
 
 
