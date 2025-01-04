@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("register-form").style.display = "block";
     }
 
+
     // Manejo de submenús
     const subvariables = document.querySelectorAll(".tallas, .top-marcas, .color");
 
@@ -183,6 +184,47 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutButton.style.display = 'none';  // Asegurarse de que no se muestra el botón
     }
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const block1 = document.getElementById("block-1");
+    const block2 = document.getElementById("block-2");
+    const block3 = document.getElementById("block-3");
+
+    // Obtener productos desde el backend
+    fetch('http://localhost:5000/productos') // Asegúrate de que esta ruta sea la correcta
+        .then(response => response.json())
+        .then(products => {
+            products.forEach(product => {
+                const productDiv = document.createElement("div");
+                productDiv.classList.add("resumen-item");
+
+                // Plantilla para mostrar los datos del producto
+                productDiv.innerHTML = `
+                    <img src="${product.image_url}" alt="${product.name}" class="imagen-resumen">
+                    <div class="texto-resumen">
+                        <h3>${product.name}</h3>
+                        <p>${product.Description}</p>
+                        <p><strong>Precio:</strong> $${product.price}</p>
+                        <a href="/product/${product.id}" class="ver-detalles">Ver detalles</a>
+                    </div>
+                `;
+
+                // Agregar el producto al bloque correspondiente
+                if (product.id >= 1 && product.id <= 4) {
+                    block1.appendChild(productDiv);
+                } else if (product.id >= 5 && product.id <= 8) {
+                    block2.appendChild(productDiv);
+                } else if (product.id >= 9 && product.id <= 12) {
+                    block3.appendChild(productDiv);
+                }
+            });
+        })
+        .catch(err => console.error('Error al obtener los productos:', err));
+});
+
+
+
 
 
 

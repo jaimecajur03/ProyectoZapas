@@ -184,6 +184,7 @@ body {
     transition: transform 0.3s ease; /* Efecto suave de transformación */
 }
 
+
 .resumen-item:hover {
     transform: translateY(-5px); /* Mueve el elemento hacia arriba al pasar el cursor */
 }
@@ -245,4 +246,18 @@ body {
     padding: 5px 10px;
     cursor: pointer;
     margin-top: 5px;
+}
+
+.ver-detalles {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.ver-detalles:hover {
+    background-color: #0056b3;
 }

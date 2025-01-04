@@ -14,6 +14,7 @@ const SECRET_KEY = process.env.SECRET_KEY || 'D4NG3R0U5CRYP4%';  // Clave secret
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use('/img', express.static('/img'));
 
 
 app.use(cors({
@@ -82,7 +83,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// Ruta de inicio de sesión
+
 // Ruta de inicio de sesión
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
@@ -161,3 +162,126 @@ app.post('/verify-token', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
+// Ruta para obtener los productos
+app.get('/productos', (req, res) => {
+    const query = 'SELECT * FROM productos';
+    
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error al obtener productos:', err);
+            return res.status(500).json({ message: 'Error al obtener productos' });
+        }
+        
+        res.json(results);  // Devolvemos los productos en formato JSON
+    });
+});
+
+
+
+// Productos del ID 1 al 4
+app.get('/products/block1', (req, res) => {
+    const query = 'SELECT id, name, description, image_url FROM products WHERE id BETWEEN 1 AND 4';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: "Error al obtener los productos del bloque 1" });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Productos del ID 5 al 8
+app.get('/products/block2', (req, res) => {
+    const query = 'SELECT id, name, description, image_url FROM products WHERE id BETWEEN 5 AND 8';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: "Error al obtener los productos del bloque 2" });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Productos del ID 9 al 12
+app.get('/products/block3', (req, res) => {
+    const query = 'SELECT id, name, description, image_url FROM products WHERE id BETWEEN 9 AND 12';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: "Error al obtener los productos del bloque 3" });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+
+
+
+
+app.post('/add-product', (req, res) => {
+    const { name, price, description, image_url } = req.body;
+
+    if (!name || !price || !description || !image_url) {
+        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+    }
+
+    const query = 'INSERT INTO productos (name, price, description, image_url) VALUES (?, ?, ?, ?)';
+    db.query(query, [name, price, description, image_url], (err, results) => {
+        if (err) {
+            console.error('Error al añadir producto:', err);
+            return res.status(500).json({ message: "Error al añadir producto" });
+        }
+        res.status(201).json({ message: "Producto añadido exitosamente", productId: results.insertId });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+const multer = require('multer');
+const path = require('path');
+
+// Configuración de multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Carpeta donde se guardarán las imágenes
+    },
+    filename: (req, file, cb) => {
+        const uniqueName = Date.now() + '-' + file.originalname.replace(/\s+/g, '_');
+        cb(null, uniqueName);
+    }
+});
+
+const upload = multer({ storage });
+
+// Ruta para subir imágenes
+app.post('/upload-image', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No se subió ninguna imagen' });
+    }
+
+    const imagePath = `/uploads/${req.file.filename}`; // Ruta relativa de la imagen
+
+    // Si también quieres guardar la ruta en la base de datos:
+    const query = 'INSERT INTO productos (image_url) VALUES (?)';
+    db.query(query, [imagePath], (err, result) => {
+        if (err) {
+            console.error('Error al guardar la ruta de la imagen:', err);
+            return res.status(500).json({ message: 'Error al guardar en la base de datos' });
+        }
+
+        res.status(200).json({ message: 'Imagen subida exitosamente', imagePath });
+    });
+});
+
+
