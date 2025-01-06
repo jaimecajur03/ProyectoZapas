@@ -140,19 +140,7 @@
             </div>
         </div>
 
-        <!-- Carrito de compras -->
-        <div id="cart-container">
-            <button id="cart-button">
-                🛒 Carrito (<span id="cart-count">0</span>)
-            </button>
-        </div>
-
-        <!-- Detalles del carrito (oculto por defecto) -->
-        <div id="cart-details" style="display: none;">
-            <h2>Carrito</h2>
-            <ul id="cart-list"></ul>
-            <button id="checkout-button">Confirmar Compra</button>
-        </div>
+        
 
         <!-- Información del usuario -->
         <div id="user-container" >
@@ -160,12 +148,23 @@
             <button id="logout-button" style="display: none;">Cerrar sesión</button>
         </div>
 
-        <div id="productos-container" style="display: none;"></div>
-        <div id="cart-details">
+        <!-- Carrito de compras -->
+        <div id="cart-container">
+            <button id="cart-button">                
+                🛒 Carrito (<span id="cart-count">0</span>)
+            </button>
+        </div>
+
+        <!-- Detalles del carrito (oculto por defecto) -->
+        <div id="cart-details" style="display: none;">
             <h2>Carrito</h2>
+            <p id="empty-cart-message">
+                <button id="view-cart-button">Ir al carrito</button>
+            </p>
+            
             <ul id="cart-list"></ul>
-            <button id="checkout-button" style="display: none;">Confirmar Compra</button>
-</div>
+            <button id="checkout-button">Confirmar Compra</button>
+        </div>
 
 
             </div>

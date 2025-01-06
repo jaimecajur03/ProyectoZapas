@@ -202,13 +202,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Plantilla para mostrar los datos del producto
                 productDiv.innerHTML = `
                     <img src="${product.image_url}" alt="${product.name}" class="imagen-resumen">
-                    <div class="texto-resumen">
-                        <h3>${product.name}</h3>
+                        <div class="texto-resumen">
+                            <h3>${product.name}</h3>
                         <p>${product.Description}</p>
-                        <p><strong>Precio:</strong> $${product.price}</p>
-                        <a href="/product/${product.id}" class="ver-detalles">Ver detalles</a>
-                    </div>
-                `;
+                            <p><strong>Precio:</strong> $${product.price}</p>
+                            <a href="/product/${product.id}" class="ver-detalles">Ver detalles</a>
+                            <button class="add-to-cart" data-id="${product.id}">Añadir al carrito</button>
+                        </div>
+                    `;
 
                 // Agregar el producto al bloque correspondiente
                 if (product.id >= 1 && product.id <= 4) {
@@ -219,8 +220,106 @@ document.addEventListener("DOMContentLoaded", () => {
                     block3.appendChild(productDiv);
                 }
             });
+        
+             // Agregar eventos a los botones
+            document.querySelectorAll(".add-to-cart").forEach(button => {
+                button.addEventListener("click", (event) => {
+                    const productId = event.target.dataset.id;
+                    addToCart(productId);
+                });
+            });
         })
+
+            
+
         .catch(err => console.error('Error al obtener los productos:', err));
+});
+
+function addToCart(productId) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    if (!cart.includes(productId)) {
+        cart.push(productId);
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // Actualizar el contador del carrito
+        const cartCount = document.getElementById("cart-count");
+        cartCount.textContent = cart.length;
+
+        alert("Producto añadido al carrito");
+    } else {
+        alert("Este producto ya está en el carrito");
+    }
+}
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const cartButton = document.getElementById("cart-button");
+    const cartDetails = document.getElementById("cart-details");
+    const cartList = document.getElementById("cart-list");
+    const cartCount = document.getElementById("cart-count");
+
+    // Mostrar/Ocultar el carrito
+    cartButton.addEventListener("click", () => {
+        cartDetails.style.display = cartDetails.style.display === "none" ? "block" : "none";
+        loadCartItems();
+    });
+
+    // Función para cargar los productos del carrito
+    function loadCartItems() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cartList.innerHTML = "";
+
+        if (cart.length === 0) {
+            cartList.innerHTML = "<li>El carrito está vacío</li>";
+            return;
+        }
+
+        fetch('http://localhost:5000/products') // Cambia la URL si usas un backend diferente
+            .then(response => response.json())
+            .then(products => {
+                cart.forEach(productId => {
+                    const product = products.find(p => p.id === parseInt(productId));
+
+                    if (product) {
+                        const listItem = document.createElement("li");
+                        listItem.innerHTML = `
+                            <div>
+                                <img src="${product.image_url}" alt="${product.name}" style="width: 50px; height: 50px; margin-right: 10px;">
+                                <strong>${product.name}</strong> - $${product.price}
+                            </div>
+                        `;
+                        cartList.appendChild(listItem);
+                    }
+                });
+
+                // Actualiza el contador del carrito
+                cartCount.textContent = cart.length;
+            })
+            .catch(err => console.error("Error al cargar los productos del carrito:", err));
+    }
+
+    // Evento para el botón de confirmar compra
+    document.getElementById("checkout-button").addEventListener("click", () => {
+        alert("Compra confirmada. ¡Gracias por tu compra!");
+        localStorage.removeItem("cart"); // Limpia el carrito
+        cartList.innerHTML = "<li>El carrito está vacío</li>";
+        cartCount.textContent = "0";
+        cartDetails.style.display = "none";
+    });
+});
+
+document.getElementById("view-cart-button").addEventListener("click", () => {
+    window.location.href = "cart.html";
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Actualizar el contador del carrito al cargar la página
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartCount = document.getElementById("cart-count");
+    cartCount.textContent = cart.length;
 });
 
 
