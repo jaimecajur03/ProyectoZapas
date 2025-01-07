@@ -31,16 +31,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         });
 
+    
     // Función de login
     window.login = function() {
         const email = document.getElementById("login-email").value;
         const password = document.getElementById("login-password").value;
-    
+
         if (!email || !password) {
             alert("Por favor, completa todos los campos");
             return;
         }
-    
+
         fetch('http://localhost:5000/login', {
             method: 'POST',
             headers: {
@@ -55,8 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Login exitoso!");
                 localStorage.setItem('token', data.token); // Almacenar el token
                 localStorage.setItem('userName', data.userName); // Almacenar el nombre del usuario
-                showAdminOptions(data.isAdmin); // Mostrar opciones si es admin
-                window.location.reload(); // Recargar la página para reflejar el cambio
+                localStorage.setItem('isAdmin', data.isAdmin == 1); // Almacenar si es administrador
+                showAdminOptions(data.isAdmin == 1); // Mostrar opciones si es administrador
+                updateUIAfterLogin(); // Actualizar la interfaz sin recargar la página
             } else {
                 alert("Credenciales incorrectas");
             }
@@ -65,7 +67,105 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error(err);
             alert("Error de conexión");
         });
+    };
+
+    // Actualizar la interfaz después de iniciar sesión
+    function updateUIAfterLogin() {
+        const userName = localStorage.getItem('userName');
+        document.getElementById('user-name').textContent = userName || "Usuario";
+
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
+        showAdminOptions(isAdmin); // Asegurarse de mostrar el panel si es administrador
+
+        // Mostrar el botón de logout
+        const logoutButton = document.getElementById('logout-button');
+        if (logoutButton) {
+            logoutButton.style.display = 'block'; // Hacer visible el botón de logout
+        }
+
+        // Ocultar el formulario de login
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+        if (loginForm) {
+            loginForm.style.display = 'none';  // Ocultar el formulario de login
+        }
+        if (registerForm) {
+            registerForm.style.display = 'none';  // Ocultar el formulario de registro si es necesario
+        }
+
+        // Mostrar el nombre del usuario (si está autenticado)
+        const userNameElement = document.getElementById('user-name');
+        if (userNameElement) {
+            userNameElement.style.display = 'inline';  // Asegurarse de que el nombre de usuario sea visible
+        }
     }
+
+    // Función de logout
+    document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById('logout-button');
+        const userNameElement = document.getElementById('user-name');
+
+        // Si hay un token, mostramos el botón de logout y el nombre de usuario
+        const token = localStorage.getItem('token');
+        if (token) {
+            const userName = localStorage.getItem('userName');
+            userNameElement.textContent = userName || "Usuario";
+            logoutButton.style.display = 'block'; // Mostrar el botón logout
+
+            logoutButton.addEventListener('click', () => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('userName');
+                alert(`Adiós, ${userName}`);
+
+                // Ocultar el botón de logout al cerrar sesión
+                logoutButton.style.display = 'none';
+                userNameElement.textContent = 'Usuario'; // Reiniciar el nombre de usuario
+                updateUIAfterLogout(); // Llamar a la función que maneja el logout
+            });
+        } else {
+            logoutButton.style.display = 'none'; // Ocultar si no hay token
+        }
+    });
+
+    // Función para actualizar la UI después de logout
+    function updateUIAfterLogout() {
+        const userNameElement = document.getElementById('user-name');
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+
+        userNameElement.textContent = 'Usuario'; // Resetear nombre de usuario
+        userNameElement.style.display = 'none'; // Ocultar el nombre de usuario
+
+        if (loginForm) {
+            loginForm.style.display = 'block';  // Mostrar el formulario de login de nuevo
+        }
+        if (registerForm) {
+            registerForm.style.display = 'none';  // Asegurarse de que el formulario de registro no esté visible
+        }
+    }
+
+
+    
+    
+    function showAdminOptions(isAdmin) {
+        console.log("isAdmin: ", isAdmin); // Verificar el valor de isAdmin
+        const adminPanelButton = document.getElementById('admin-panel-button');
+        if (adminPanelButton) {
+            if (isAdmin) {
+                adminPanelButton.style.display = 'block';  // Mostrar el botón de administrador
+                console.log("Panel de administrador mostrado");
+            } else {
+                adminPanelButton.style.display = 'none';   // Ocultar el botón de administrador
+                console.log("Panel de administrador ocultado");
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
     
 
     // Función de registro
@@ -92,44 +192,43 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Error de registro");
         });
     }
-
-    // Mostrar opciones de administrador
-    function showAdminOptions(isAdmin) {
-        const adminOptions = document.getElementById("admin-options");
-        if (adminOptions) {
-            adminOptions.style.display = isAdmin ? "block" : "none";
-        }
-    }
+    
 
     // Verificación de token al cargar la página
     const token = localStorage.getItem('token');
     if (token) {
+        console.log("Token enviado en la cabecera:", localStorage.getItem('token'));
         fetch('http://localhost:5000/verify-token', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Accept': 'application/json'
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Redirección o error del servidor');
-            }
-            return response.json();  // Intenta convertir la respuesta a JSON
-        })
-        .then(data => {
-            if (data.isValid) {
-                const userName = localStorage.getItem('userName');
-                document.getElementById('user-name').textContent = userName || "Usuario"; // Mostrar nombre o un valor predeterminado
-            } else {
-                localStorage.removeItem('token');
-                localStorage.removeItem('userName');
-                alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
-            }
-        })
-        .catch(err => console.error(err));
-    }
-
+            .then(response => {
+                console.log("Código de estado:", response.status); // Registrar el código de estado
+                if (!response.ok) {
+                    // Intentar leer el cuerpo del error
+                    return response.text().then(errorText => {
+                        console.error("Error en la respuesta del servidor:", errorText);
+                        throw new Error(`Error del servidor: ${response.status}`);
+                    });
+                }
+                return response.json(); // Continuar si no hubo error
+            })
+            .then(data => {
+                if (data.isValid) {
+                    const userName = localStorage.getItem('userName');
+                    document.getElementById('user-name').textContent = userName || "Usuario"; // Mostrar nombre o un valor predeterminado
+                } else {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userName');
+                    alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+                }
+            })
+            .catch(err => console.error("Error en la verificación del token:", err.message));
+        
+}
 
     // Usar addEventListener para evitar el error de ReferenceError
     const loginLink = document.querySelector('.login');
@@ -321,6 +420,118 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartCount = document.getElementById("cart-count");
     cartCount.textContent = cart.length;
 });
+
+
+//Administrador
+document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem('token');
+    const isAdmin = localStorage.getItem('isAdmin'); // Verifica si el usuario es admin
+
+    // Mostrar el panel de admin solo si el usuario tiene permisos
+    if (isAdmin === "true") {
+        document.getElementById("admin-panel").style.display = "block";
+        loadAdminProducts();
+    }
+
+    // Cargar productos para administración
+    function loadAdminProducts() {
+        fetch('http://localhost:5000/productos') // Ajusta la URL según tu backend
+            .then(response => response.json())
+            .then(products => {
+                const adminProductList = document.getElementById("product-list-admin");
+                adminProductList.innerHTML = ""; // Limpia el contenedor
+
+                products.forEach(product => {
+                    const productDiv = document.createElement("div");
+                    productDiv.classList.add("admin-product-item");
+
+                    productDiv.innerHTML = `
+                        <div>
+                            <img src="${product.image_url}" alt="${product.name}" style="width: 50px; height: 50px; margin-right: 10px;">
+                            <strong>${product.name}</strong> - $${product.price}
+                            <button class="delete-product" data-id="${product.id}">Eliminar</button>
+                        </div>
+                    `;
+
+                    adminProductList.appendChild(productDiv);
+                });
+
+                // Añadir evento a los botones de eliminar
+                document.querySelectorAll(".delete-product").forEach(button => {
+                    button.addEventListener("click", (event) => {
+                        const productId = event.target.dataset.id;
+                        deleteProduct(productId);
+                    });
+                });
+            })
+            .catch(err => console.error("Error al cargar productos:", err));
+    }
+
+    // Función para eliminar un producto
+    function deleteProduct(productId) {
+        const token = localStorage.getItem('token');
+
+        fetch(`http://localhost:5000/productos/${productId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json',
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No se pudo eliminar el producto');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message || "Producto eliminado correctamente");
+                loadAdminProducts(); // Recargar la lista de productos
+            })
+            .catch(err => console.error("Error al eliminar producto:", err));
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    if (isAdmin) {
+        document.getElementById('admin-link').style.display = 'inline-block';
+    }
+});
+
+// Mostrar el botón "Panel de Administrador" solo si el usuario es admin
+function showAdminButton() {
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    const adminButtonContainer = document.getElementById("admin-button-container");
+
+    if (isAdmin) {
+        // Mostrar el botón si es admin
+        adminButtonContainer.style.display = "block";
+
+        // Añadir el evento para redirigir al panel de administración
+        const adminButton = document.getElementById("admin-panel-button");
+        adminButton.addEventListener("click", () => {
+            window.location.href = "admin.html"; // Redirigir a la página de administración
+        });
+    }
+}
+
+// Llamar a la función cuando se cargue la página
+document.addEventListener("DOMContentLoaded", showAdminButton);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

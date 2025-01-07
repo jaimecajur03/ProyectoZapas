@@ -43,6 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Compra confirmada. ¡Gracias por tu compra!");
         localStorage.removeItem("cart");
         window.location.href = "index.html";
-    });
+});
 });
 

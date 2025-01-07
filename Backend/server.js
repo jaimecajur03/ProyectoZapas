@@ -18,7 +18,9 @@ app.use('/img', express.static('/img'));
 
 
 app.use(cors({
-    origin: 'http://127.0.0.1:5500'
+    origin: 'http://127.0.0.1:5500',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Authorization', 'Content-Type', 'Accept'],
 }));
 
 
@@ -38,6 +40,38 @@ db.connect((err) => {
     }
     console.log('Conectado a la base de datos MySQL');
 });
+
+
+// Primero define la función authenticateToken
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    console.log("Encabezado de autorización:", authHeader);
+
+    const token = authHeader && authHeader.split(' ')[1];
+    console.log("Token extraído:", token);
+
+    if (!token) {
+        console.log("No se proporcionó un token.");
+        return res.status(401).json({ message: 'No se proporcionó un token' });
+    }
+
+    jwt.verify(token, SECRET_KEY, (err, user) => {
+        if (err) {
+            console.log("Error al verificar el token:", err.message);
+            return res.status(403).json({ message: 'Token inválido o expirado' });
+        }
+        console.log("Usuario decodificado:", user);
+        req.user = user;
+        next();
+    });
+};
+
+
+// Ahora puedes usar la función authenticateToken en tus rutas
+app.post('/verify-token', authenticateToken, (req, res) => {
+    res.json({ isValid: true, user: req.user });
+});
+
 
 // Ruta de registro
 app.post('/register', async (req, res) => {
@@ -113,49 +147,27 @@ app.post('/login', (req, res) => {
                 return res.status(400).json({ message: "Credenciales incorrectas" });
             }
 
-            // Generar un token JWT
-            const token = jwt.sign({ email: user.email, isAdmin: user.isAdmin }, SECRET_KEY, { expiresIn: '1h' });
+            // Aquí verificas si el usuario es administrador
+            const isAdmin = user.isAdmin === 1;  // Verifica si isAdmin es 1 (admin)
 
-            // Enviar el token y el nombre del usuario en la respuesta
-            res.json({ token, userName: user.name, isAdmin: user.isAdmin });
+            // Generar un token JWT con la información del usuario
+            const token = jwt.sign({ email: user.email, isAdmin: user.isAdmin === 1 }, SECRET_KEY);
+            
+            // Enviar solo una respuesta
+            return res.json({ token, userName: user.name, isAdmin });  // Respuesta correcta
         });
     });
 });
 
 
 
+
 // Ruta para verificar si el token es válido
-app.get('/verify-token', (req, res) => {
-    const token = req.headers['authorization'];
-
-    if (!token) {
-        return res.status(401).json({ message: "Token no proporcionado" });
-    }
-
-    try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        res.json({ isValid: true, isAdmin: decoded.isAdmin });
-    } catch (error) {
-        res.status(401).json({ message: "Token inválido" });
-        console.log("Token recibido:", token);
-    }
+app.post('/verify-token', authenticateToken, (req, res) => {
+    res.status(200).json({ isValid: true, user: req.user });
 });
 
-app.post('/verify-token', (req, res) => {
-    const token = req.headers['authorization'];
-    
-    if (!token) {
-        return res.status(401).json({ message: "Token no proporcionado" });
-    }
 
-    try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        res.json({ valid: true, name: decoded.name });
-    } catch (error) {
-        console.error(error);
-        res.status(401).json({ message: "Token inválido" });
-    }
-});
 
 
 // Iniciar el servidor
@@ -243,6 +255,20 @@ app.post('/add-product', (req, res) => {
 
 
 
+// Usa el middleware en la ruta
+app.post('/verify-token', authenticateToken, (req, res) => {
+    res.json({ isValid: true, user: req.user });
+});
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -283,5 +309,87 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
         res.status(200).json({ message: 'Imagen subida exitosamente', imagePath });
     });
 });
+
+//Administrador
+
+app.delete('/products/:id', authenticateToken, (req, res) => {
+    if (!req.user.isAdmin) {
+        return res.status(403).json({ message: 'No tienes permiso para realizar esta acción.' });
+    }
+
+    const productId = req.params.id;
+
+    // Eliminar el producto de la base de datos
+    const query = 'DELETE FROM productos WHERE id = ?';
+    db.query(query, [productId], (err, results) => {
+        if (err) {
+            console.error('Error al eliminar el producto:', err);
+            return res.status(500).json({ message: 'Error al eliminar el producto' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Producto no encontrado.' });
+        }
+
+        res.status(200).json({ message: 'Producto eliminado correctamente.' });
+    });
+});
+
+app.delete('/usuarios/:id', authenticateToken, (req, res) => {
+    if (!req.user.isAdmin) {
+        return res.status(403).json({ message: 'No tienes permisos para realizar esta acción.' });
+    }
+    
+    const userId = req.params.id;
+    const query = 'DELETE FROM users WHERE id = ?';
+    db.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Error al eliminar el usuario.' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+
+        res.status(200).json({ message: 'Usuario eliminado correctamente.' });
+    });
+});
+
+// Ruta para actualizar un producto
+
+app.put('/productos/:id', authenticateToken, (req, res) => {
+    if (!req.user.isAdmin) {
+        return res.status(403).json({ message: 'No tienes permisos para realizar esta acción.' });
+    }
+
+    const productId = req.params.id;
+    const { name, price, description, image_url } = req.body;
+
+    if (!name || !price || !description || !image_url) {
+        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+    }
+
+    const query = 'UPDATE productos SET name = ?, price = ?, description = ?, image_url = ? WHERE id = ?';
+    db.query(query, [name, price, description, image_url, productId], (err, results) => {
+        if (err) {
+            console.error('Error al actualizar el producto:', err);
+            return res.status(500).json({ message: 'Error al actualizar el producto' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Producto no encontrado.' });
+        }
+
+        res.status(200).json({ message: 'Producto actualizado correctamente' });
+    });
+});
+
+
+
+
+
+
+
 
 

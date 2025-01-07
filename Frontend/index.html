@@ -124,6 +124,21 @@
                     <input type="password" id="login-password" placeholder="Contraseña" required>
                     <button type="button" onclick="login()">Iniciar sesión</button>
                 </form>
+                <script>
+                    document.getElementById('login-form').addEventListener('submit', (e) => {
+                        e.preventDefault();
+                
+                        const username = document.getElementById('username').value;
+                
+                        // Guarda el usuario en localStorage
+                        localStorage.setItem('loggedInUser', JSON.stringify({ username }));
+                
+                        alert('Sesión iniciada como ' + username);
+                
+                        // Opcional: Redirigir al usuario a otra página
+                        window.location.href = 'cart.html';
+                    });
+                </script>
                 <p>¿No tienes cuenta? <a href="#" class="register">Registrarse</a></p>
             </div>
         
@@ -147,6 +162,15 @@
             <span id="user-name">Usuario</span>
             <button id="logout-button" style="display: none;">Cerrar sesión</button>
         </div>
+        
+        <!--Administrador-->        
+        <div>
+            <button id="admin-panel-button" style="display: none;" onclick="window.location.href='admin.html'">
+                Panel de Administrador
+            </button>
+        </div>
+        
+        
 
         <!-- Carrito de compras -->
         <div id="cart-container">
@@ -204,6 +228,13 @@
             <div class="resumen-titulo">Atención al Cliente</div>
             <div class="texto-enlace"><a href="#">Correo Electrónico</a></div>
             <div class="texto-enlace"><a href="#">Número de Teléfono</a></div>
+            <!-- Este botón solo se mostrará si el usuario es admin -->
+            <!-- Botón de Panel de Administrador -->
+            
+
+
+
+
 
         </div>
 
