@@ -28,8 +28,8 @@ app.use(cors({
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',           // Usuario de MySQL (por defecto "root")
-    password: '',           // Contraseña de MySQL (si no tienes contraseña, déjalo vacío)
-    database: 'sportja'     // Nombre de tu base de datos
+    password: '',           // Contraseña de MySQL 
+    database: 'sportja'     // Nombre de la base de datos
 });
 
 // Conectar a la base de datos MySQL
@@ -147,7 +147,7 @@ app.post('/login', (req, res) => {
                 return res.status(400).json({ message: "Credenciales incorrectas" });
             }
 
-            // Aquí verificas si el usuario es administrador
+            // Aquí verifica si el usuario es administrador
             const isAdmin = user.isAdmin === 1;  // Verifica si isAdmin es 1 (admin)
 
             // Generar un token JWT con la información del usuario
@@ -160,14 +160,10 @@ app.post('/login', (req, res) => {
 });
 
 
-
-
 // Ruta para verificar si el token es válido
 app.post('/verify-token', authenticateToken, (req, res) => {
     res.status(200).json({ isValid: true, user: req.user });
 });
-
-
 
 
 // Iniciar el servidor
@@ -188,7 +184,6 @@ app.get('/productos', (req, res) => {
         res.json(results);  // Devolvemos los productos en formato JSON
     });
 });
-
 
 
 // Productos del ID 1 al 4
@@ -231,9 +226,6 @@ app.get('/products/block3', (req, res) => {
 });
 
 
-
-
-
 app.post('/add-product', (req, res) => {
     const { name, price, description, image_url } = req.body;
 
@@ -252,25 +244,10 @@ app.post('/add-product', (req, res) => {
 });
 
 
-
-
-
 // Usa el middleware en la ruta
 app.post('/verify-token', authenticateToken, (req, res) => {
     res.json({ isValid: true, user: req.user });
 });
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -298,7 +275,7 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
 
     const imagePath = `/uploads/${req.file.filename}`; // Ruta relativa de la imagen
 
-    // Si también quieres guardar la ruta en la base de datos:
+    // Si quiero guardar la ruta en la base de datos:
     const query = 'INSERT INTO productos (image_url) VALUES (?)';
     db.query(query, [imagePath], (err, result) => {
         if (err) {
@@ -311,29 +288,6 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
 });
 
 //Administrador
-
-app.delete('/products/:id', authenticateToken, (req, res) => {
-    if (!req.user.isAdmin) {
-        return res.status(403).json({ message: 'No tienes permiso para realizar esta acción.' });
-    }
-
-    const productId = req.params.id;
-
-    // Eliminar el producto de la base de datos
-    const query = 'DELETE FROM productos WHERE id = ?';
-    db.query(query, [productId], (err, results) => {
-        if (err) {
-            console.error('Error al eliminar el producto:', err);
-            return res.status(500).json({ message: 'Error al eliminar el producto' });
-        }
-
-        if (results.affectedRows === 0) {
-            return res.status(404).json({ message: 'Producto no encontrado.' });
-        }
-
-        res.status(200).json({ message: 'Producto eliminado correctamente.' });
-    });
-});
 
 app.delete('/usuarios/:id', authenticateToken, (req, res) => {
     if (!req.user.isAdmin) {
@@ -356,8 +310,8 @@ app.delete('/usuarios/:id', authenticateToken, (req, res) => {
     });
 });
 
-// Ruta para actualizar un producto
 
+// Ruta para actualizar un producto
 app.put('/productos/:id', authenticateToken, (req, res) => {
     if (!req.user.isAdmin) {
         return res.status(403).json({ message: 'No tienes permisos para realizar esta acción.' });
@@ -366,12 +320,10 @@ app.put('/productos/:id', authenticateToken, (req, res) => {
     const productId = req.params.id;
     const { name, price, description, image_url } = req.body;
 
-    if (!name || !price || !description || !image_url) {
-        return res.status(400).json({ message: "Todos los campos son obligatorios" });
-    }
-
     const query = 'UPDATE productos SET name = ?, price = ?, description = ?, image_url = ? WHERE id = ?';
-    db.query(query, [name, price, description, image_url, productId], (err, results) => {
+    const values = [name, price, description, image_url, productId];
+
+    db.query(query, values, (err, results) => {
         if (err) {
             console.error('Error al actualizar el producto:', err);
             return res.status(500).json({ message: 'Error al actualizar el producto' });
@@ -387,9 +339,85 @@ app.put('/productos/:id', authenticateToken, (req, res) => {
 
 
 
+app.delete('/productos/:id', authenticateToken, (req, res) => {
+    const productId = req.params.id;
+
+    const query = 'DELETE FROM productos WHERE id = ?';
+    db.query(query, [productId], (err, results) => {
+        if (err) {
+            console.error('Error al eliminar el producto:', err);
+            return res.status(500).json({ message: 'Error al eliminar el producto' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Producto no encontrado.' });
+        }
+
+        res.status(200).json({ message: 'Producto eliminado correctamente.' });
+    });
+});
 
 
 
+app.get('/users', authenticateToken, (req, res) => {
+    res.json(usuarios); // Donde `usuarios` es la lista de usuarios
+});
 
 
 
+// Ruta para obtener los usuarios
+app.get('/usuarios', (req, res) => {
+    const query = 'SELECT * FROM users';  
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error al obtener usuarios:', err);  // Esto ayudará a depurar el error exacto
+            return res.status(500).json({ message: 'Error al obtener usuarios' });
+        }
+
+        res.json(results);  // Devolvemos los resultados en formato JSON
+    });
+});
+
+// Crear un nuevo usuario
+app.post('/usuarios', (req, res) => {
+    const { name, email } = req.body;
+    const query = 'INSERT INTO users (name, email) VALUES (?, ?)';
+    
+    db.query(query, [name, email], (err, results) => {
+        if (err) {
+            console.error('Error al crear el usuario:', err);
+            return res.status(500).json({ message: 'Error al crear el usuario' });
+        }
+        res.status(201).json({ message: 'Usuario creado exitosamente' });
+    });
+});
+
+// Actualizar un usuario existente
+app.put('/usuarios/:id', (req, res) => {
+    const { name, email } = req.body;
+    const { id } = req.params;
+    const query = 'UPDATE users SET name = ?, email = ? WHERE id = ?'; 
+
+    db.query(query, [name, email, id], (err, results) => {
+        if (err) {
+            console.error('Error al actualizar el usuario:', err);  // Depuración del error
+            return res.status(500).json({ message: 'Error al actualizar el usuario', error: err });
+        }
+        res.json({ message: 'Usuario actualizado exitosamente' });
+    });
+});
+
+// Eliminar un usuario
+app.delete('/usuarios/:id', (req, res) => {
+    const { id } = req.params;
+    const query = 'DELETE FROM users WHERE id = ?';  
+
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            console.error('Error al eliminar el usuario:', err);  // Depuración del error
+            return res.status(500).json({ message: 'Error al eliminar el usuario' });
+        }
+        res.json({ message: 'Usuario eliminado exitosamente' });
+    });
+});

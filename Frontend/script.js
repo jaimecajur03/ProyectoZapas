@@ -143,8 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
             registerForm.style.display = 'none';  // Asegurarse de que el formulario de registro no esté visible
         }
     }
-
-
     
     
     function showAdminOptions(isAdmin) {
@@ -162,12 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     
-    
-    
-    
-    
-    
-
     // Función de registro
     window.register = function() {
         const name = document.getElementById("register-name").value;
@@ -193,7 +185,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     
-
     // Verificación de token al cargar la página
     const token = localStorage.getItem('token');
     if (token) {
@@ -291,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const block3 = document.getElementById("block-3");
 
     // Obtener productos desde el backend
-    fetch('http://localhost:5000/productos') // Asegúrate de que esta ruta sea la correcta
+    fetch('http://localhost:5000/productos') 
         .then(response => response.json())
         .then(products => {
             products.forEach(product => {
@@ -375,7 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch('http://localhost:5000/products') // Cambia la URL si usas un backend diferente
+        fetch('http://localhost:5000/products') // Cambiar la URL si se usa un backend diferente
             .then(response => response.json())
             .then(products => {
                 cart.forEach(productId => {
@@ -435,7 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Cargar productos para administración
     function loadAdminProducts() {
-        fetch('http://localhost:5000/productos') // Ajusta la URL según tu backend
+        fetch('http://localhost:5000/productos') // Ajustar la URL según backend
             .then(response => response.json())
             .then(products => {
                 const adminProductList = document.getElementById("product-list-admin");
@@ -518,25 +509,3 @@ function showAdminButton() {
 
 // Llamar a la función cuando se cargue la página
 document.addEventListener("DOMContentLoaded", showAdminButton);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -111,6 +111,19 @@
         <div class="menu-item">
         <input type="text" placeholder="Buscar Zapatillas..." id="search" class="search-bar">
         </div>
+        <script>
+            document.getElementById("search").addEventListener("input", function() {
+                var searchQuery = this.value.toLowerCase();
+                
+                if (searchQuery.includes("mujeres")) {
+                    window.location.href = "/Frontend/mujeres.html"; // Redirige a la página de mujeres
+                } else if (searchQuery.includes("hombres")) {
+                    window.location.href = "/Frontend/hombres.html"; // Redirige a la página de hombres
+                } else if (searchQuery.includes("niños")) {
+                    window.location.href = "/Frontend/niños.html"; // Redirige a la página de niños
+                }
+            });
+        </script>
 
 
 
@@ -228,14 +241,6 @@
             <div class="resumen-titulo">Atención al Cliente</div>
             <div class="texto-enlace"><a href="#">Correo Electrónico</a></div>
             <div class="texto-enlace"><a href="#">Número de Teléfono</a></div>
-            <!-- Este botón solo se mostrará si el usuario es admin -->
-            <!-- Botón de Panel de Administrador -->
-            
-
-
-
-
-
         </div>
 
         </div>
